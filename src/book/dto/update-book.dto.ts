@@ -1,6 +1,9 @@
 import { IsNotEmpty } from "class-validator";
 
 export class UpdateBookDto {
+    @IsNotEmpty({ message: 'id不能为空' })
+    id: number;
+
     @IsNotEmpty({ message: '名称不能为空' })
     name: string;
 

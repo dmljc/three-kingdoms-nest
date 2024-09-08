@@ -3,12 +3,11 @@ import { CreateBookDto } from './dto/create-book.dto';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-// import { DbService } from 'src/db/db.service';
 import { Book } from './entities/book.entity';
 
-function randomNum() {
-    return Math.floor(Math.random() * 1000000);
-}
+// function randomNum() {
+//     return Math.floor(Math.random() * 1000000);
+// }
 
 @Injectable()
 export class BookService {
@@ -16,43 +15,32 @@ export class BookService {
     private bookRepository: Repository<Book>;
 
     async list(name) {
-        return await this.bookRepository.find(name);
+        return await this.bookRepository.find({
+            where: {
+                name,
+            },
+            order: {
+                id: 'DESC'
+            }
+        });
     }
 
-    // async findById(id: number) {
-    //     const books: Book[] = await this.dbService.read();
-    //     return books.find(book => book.id === id);
-    // }
+    async detail(id: number) {
+        const book: Book = await this.bookRepository.findOneBy({ id });
+        return book;
+    }
 
     async create(createBookDto: CreateBookDto) {
         return await this.bookRepository.save(createBookDto);
     }
 
-    // async update(updateBookDto: UpdateBookDto) {
-    //     const books: Book[] = await this.dbService.read();
+    async update(updateBookDto: UpdateBookDto) {
+        await this.bookRepository.update(updateBookDto.id, updateBookDto)
+        return null;
+    }
 
-    //     const foundBook = books.find(book => book.id === updateBookDto.id);
-        
-    //     if(!foundBook) {
-    //         throw new BadRequestException('该图书不存在');
-    //     }
-
-    //     foundBook.author = updateBookDto.author;
-    //     foundBook.cover = updateBookDto.cover;
-    //     foundBook.description = updateBookDto.description;
-    //     foundBook.name = updateBookDto.name;
-        
-    //     await this.dbService.write(books);
-    //     return foundBook;
-    // }
-
-    // async delete(id: number) {
-    //     const books: Book[] = await this.dbService.read();
-    //     const index = books.findIndex(book => book.id === id);
-
-    //     if(index !== -1) {
-    //         books.splice(index, 1);
-    //         await this.dbService.write(books);
-    //     }
-    // }
+    async delete(id: number) {
+        await this.bookRepository.delete(id);
+        return null;
+    }
 }

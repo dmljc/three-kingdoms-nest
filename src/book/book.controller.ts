@@ -7,6 +7,7 @@ import {
     Get,
     Query,
     Post,
+    Put,
     Body,
     Patch,
     Param,
@@ -51,28 +52,26 @@ export class BookController {
 
     @Get('list')
     async list(@Query('name') name: string) {
-
-        console.log('name===', name)
         return this.bookService.list(name);
     }
 
-    // @Get(':id')
-    // async findById(@Param('id') id: string) {
-    //   return this.bookService.findById(+id);
-    // }
+    @Get(':id')
+    async detail(@Param('id') id: number) {
+      return this.bookService.detail(+id);
+    }
 
     @Post('create')
     async create(@Body() createBookDto: CreateBookDto) {
         return this.bookService.create(createBookDto);
     }
 
-    // @Put('update')
-    // async update(@Body() updateBookDto: UpdateBookDto) {
-    //   return this.bookService.update(updateBookDto);
-    // }
+    @Put('update')
+    async update(@Body() updateBookDto: UpdateBookDto) {
+      return this.bookService.update(updateBookDto);
+    }
 
-    // @Delete('delete/:id')
-    // async delete(@Param('id') id: string) {
-    //   return this.bookService.delete(+id);
-    // }
+    @Delete('delete/:id')
+    async delete(@Param('id') id: string) {
+      return this.bookService.delete(+id);
+    }
 }
