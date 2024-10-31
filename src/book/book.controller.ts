@@ -45,7 +45,7 @@ export class BookController {
         }),
     )
     uploadFile(@UploadedFile() file: Express.Multer.File) {
-        console.log('file', file);
+        // console.log('file', file);
         // return file.path;
         return 'uploads/' + file.filename;
     }
